@@ -27,6 +27,9 @@ export default {
         signIn: 'Login',
         signUp: 'Register',
         signOut: 'Logout',
+        toggleNav: 'Toggle navigation',
+        close: 'Close',
+        hexlet: 'Hexlet',
       },
     },
     views: {

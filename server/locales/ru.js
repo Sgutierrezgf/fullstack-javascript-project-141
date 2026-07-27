@@ -27,6 +27,9 @@ export default {
         signIn: 'Вход',
         signUp: 'Регистрация',
         signOut: 'Выход',
+        toggleNav: 'Переключить навигацию',
+        close: 'Закрыть',
+        hexlet: 'Hexlet',
       },
     },
     views: {

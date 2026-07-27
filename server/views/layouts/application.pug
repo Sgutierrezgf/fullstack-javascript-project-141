@@ -3,22 +3,30 @@ include ../mixins/forms.pug
 doctype html
 html(lang="es")
   head
-    title= t('appName')
-    script(src=assetPath('main.js'))
-    link(href=assetPath('main.css') rel="stylesheet")
     meta(charset="utf-8")
     meta(name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no")
+    title= t('appName')
+    link(href=assetPath('main.css') rel="stylesheet")
+    script(src=assetPath('main.js'))
   body.d-flex.flex-column.min-vh-100
-    nav.navbar.navbar-expand-lg.navbar-light.bg-light.mb-3
-      .container-fluid
+    //- Bootstrap Example: Navbar
+    //- https://getbootstrap.com/docs/5.3/components/navbar/
+    nav.navbar.navbar-expand-lg.navbar-dark.bg-dark
+      .container
         a.navbar-brand(href=route('root'))= t('appName')
-        button.navbar-toggler(data-bs-toggle="collapse" data-bs-target="#navbarToggleExternalContent")
+        button.navbar-toggler(
+          type="button"
+          data-bs-toggle="collapse"
+          data-bs-target="#navbarNav"
+          aria-controls="navbarNav"
+          aria-expanded="false"
+          aria-label=t('layouts.application.toggleNav')
+        )
           span.navbar-toggler-icon
-        .collapse.navbar-collapse(id="navbarToggleExternalContent")
-          .container-fluid
-            ul.navbar-nav.mr-auto
-              li.nav-item
-                a.nav-link(href=route('users'))= t('layouts.application.users')
+        #navbarNav.collapse.navbar-collapse
+          ul.navbar-nav.me-auto.mb-2.mb-lg-0
+            li.nav-item
+              a.nav-link(href=route('users'))= t('layouts.application.users')
           ul.navbar-nav
             if isAuthenticated()
               li.nav-item
@@ -28,16 +36,19 @@ html(lang="es")
                 a.nav-link(href=route('newSession'))= t('layouts.application.signIn')
               li.nav-item
                 a.nav-link(href=route('newUser'))= t('layouts.application.signUp')
-    .container.wrapper.flex-grow-1
 
+    main.container.flex-grow-1.py-4
       each messages, type in reply.flash() || []
         each message in messages
-          div.alert(class=`alert-${getAlertClass(type)}`)= message
+          .alert.alert-dismissible.fade.show(class=`alert-${getAlertClass(type)}` role="alert")
+            = message
+            button.btn-close(type="button" data-bs-dismiss="alert" aria-label=t('layouts.application.close'))
 
-      h1.my-4
-        block header
+      block header
       block content
 
-    footer
-      .container.my-5.pt-4.border-top
-        a(target="_blank" href="https://es.hexlet.io") Hexlet
+    //- Bootstrap Example: sticky-footer style
+    footer.footer.mt-auto.py-3.bg-body-tertiary
+      .container
+        span.text-body-secondary
+          a(target="_blank" rel="noopener noreferrer" href="https://es.hexlet.io")= t('layouts.application.hexlet')
