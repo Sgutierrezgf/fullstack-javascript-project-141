@@ -105,7 +105,7 @@ export default {
         email: 'Correo electrónico',
         password: 'Contraseña',
         actions: 'Acciones',
-        updateAction: 'Editar',
+        updateAction: 'Actualizar',
         deleteAction: 'Eliminar',
         createdAt: 'Fecha de creación',
         new: {
@@ -124,7 +124,7 @@ export default {
         name: 'Nombre',
         createdAt: 'Fecha de creación',
         actions: 'Acciones',
-        updateAction: 'Editar',
+        updateAction: 'Actualizar',
         deleteAction: 'Eliminar',
         new: {
           title: 'Crear estado',
@@ -142,7 +142,7 @@ export default {
         name: 'Nombre',
         createdAt: 'Fecha de creación',
         actions: 'Acciones',
-        updateAction: 'Editar',
+        updateAction: 'Actualizar',
         deleteAction: 'Eliminar',
         new: {
           title: 'Crear etiqueta',
@@ -168,7 +168,7 @@ export default {
         showAction: 'Mostrar',
         createdAt: 'Fecha de creación',
         actions: 'Acciones',
-        updateAction: 'Editar',
+        updateAction: 'Actualizar',
         deleteAction: 'Eliminar',
         new: {
           title: 'Crear tarea',

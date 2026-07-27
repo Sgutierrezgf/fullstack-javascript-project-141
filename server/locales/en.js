@@ -105,7 +105,7 @@ export default {
         email: 'Email',
         password: 'Password',
         actions: 'Actions',
-        updateAction: 'Edit',
+        updateAction: 'Update',
         deleteAction: 'Delete',
         createdAt: 'Created at',
         new: {
@@ -124,7 +124,7 @@ export default {
         name: 'Name',
         createdAt: 'Created at',
         actions: 'Actions',
-        updateAction: 'Edit',
+        updateAction: 'Update',
         deleteAction: 'Delete',
         new: {
           title: 'Create status',
@@ -142,7 +142,7 @@ export default {
         name: 'Name',
         createdAt: 'Created at',
         actions: 'Actions',
-        updateAction: 'Edit',
+        updateAction: 'Update',
         deleteAction: 'Delete',
         new: {
           title: 'Create label',
@@ -168,7 +168,7 @@ export default {
         showAction: 'Show',
         createdAt: 'Created at',
         actions: 'Actions',
-        updateAction: 'Edit',
+        updateAction: 'Update',
         deleteAction: 'Delete',
         new: {
           title: 'Create task',
