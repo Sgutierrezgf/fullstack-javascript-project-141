@@ -19,8 +19,25 @@ export default (app) => {
 
   app
     .get('/tasks', { name: 'tasks', preValidation: app.authenticate }, async (req, reply) => {
-      const tasks = await Task.query().withGraphFetched('[status, creator, executor, labels]');
-      reply.render('tasks/index', { tasks });
+      const { query: filterQuery } = req;
+      let query = Task.query();
+      if (filterQuery.status) {
+        query = query.modify('filterStatus', filterQuery.status);
+      }
+      if (filterQuery.executor) {
+        query = query.modify('filterExecutor', filterQuery.executor);
+      }
+      if (filterQuery.label) {
+        query = query.modify('filterLabel', filterQuery.label);
+      }
+      if (filterQuery.isCreatorUser) {
+        query = query.modify('filterIsCreatorUser', req.user.id);
+      }
+      const tasks = await query.withGraphFetched('[status, creator, executor, labels]');
+      const { users, statuses, labels } = await getRelatedData();
+      reply.render('tasks/index', {
+        tasks, users, statuses, labels, form: filterQuery,
+      });
       return reply;
     })
     .get('/tasks/new', { name: 'newTask', preValidation: app.authenticate }, async (req, reply) => {

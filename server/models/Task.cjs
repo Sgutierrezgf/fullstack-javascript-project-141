@@ -63,6 +63,24 @@ module.exports = class Task extends BaseModel {
     };
   }
 
+  static modifiers = {
+    filterStatus(query, statusId) {
+      query.where('statusId', statusId);
+    },
+
+    filterExecutor(query, executorId) {
+      query.where('executorId', executorId);
+    },
+
+    filterLabel(query, labelId) {
+      query.joinRelated('labels').where('labels.id', labelId);
+    },
+
+    filterIsCreatorUser(query, userId) {
+      query.where('creatorId', userId);
+    },
+  };
+
   $parseJson(json, opt) {
     const parsed = super.$parseJson(json, opt);
     const labelIds = [].concat(parsed.labels || [])

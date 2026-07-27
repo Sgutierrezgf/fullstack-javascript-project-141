@@ -177,6 +177,30 @@ describe('test tasks CRUD', () => {
     expect(taskDelete).toBeUndefined();
   });
 
+  it('filter', async () => {
+    const requestEmptyFilter = {
+      method: 'GET',
+      url: `${app.reverse('tasks')}?status=&executor=&label=`,
+    };
+    const responseEmptyFilter = await app.inject({
+      ...requestEmptyFilter,
+      cookies: sessionCookie,
+    });
+    expect(responseEmptyFilter.statusCode).toBe(200);
+
+    const id = 1;
+    const task = await models.task.query().findById(id).withGraphFetched('labels');
+    const requestFilledFilter = {
+      method: 'GET',
+      url: `${app.reverse('tasks')}?status=${task.statusId}&executor=${task.executorId}&label=${task.labels[0].id}&isCreatorUser=on`,
+    };
+    const responseFilledFilter = await app.inject({
+      ...requestFilledFilter,
+      cookies: sessionCookie,
+    });
+    expect(responseFilledFilter.statusCode).toBe(200);
+  });
+
   afterEach(async () => {
     await knex.migrate.rollback();
   });
