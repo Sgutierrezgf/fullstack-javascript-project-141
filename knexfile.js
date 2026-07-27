@@ -2,6 +2,7 @@
 
 import path from 'path';
 import { fileURLToPath } from 'url';
+import { knexSnakeCaseMappers } from 'objection';
 import 'dotenv/config';
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
@@ -17,6 +18,7 @@ export const development = {
   },
   useNullAsDefault: true,
   migrations,
+  ...knexSnakeCaseMappers(),
 };
 
 export const test = {
@@ -24,6 +26,7 @@ export const test = {
   connection: ':memory:',
   useNullAsDefault: true,
   migrations,
+  ...knexSnakeCaseMappers(),
 };
 
 export const production = {
@@ -34,4 +37,5 @@ export const production = {
   },
   useNullAsDefault: true,
   migrations,
+  ...knexSnakeCaseMappers(),
 };

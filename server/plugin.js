@@ -78,6 +78,7 @@ const addHooks = (app) => {
   app.addHook('preHandler', async (req, reply) => {
     reply.locals = {
       isAuthenticated: () => req.isAuthenticated(),
+      getUserId: () => req.user?.id,
     };
   });
 };
@@ -110,6 +111,14 @@ const registerPlugins = async (app) => {
     },
   // @ts-ignore
   )(...args));
+
+  app.decorate('onlyOwnerAccess', async (req, reply) => {
+    if (Number(req.params.id) !== Number(req.user.id)) {
+      req.flash('error', i18next.t('flash.users.onlyOwnerAccess'));
+      return reply.redirect(app.reverse('users'));
+    }
+    return undefined;
+  });
 
   await app.register(fastifyMethodOverride);
   await app.register(fastifyObjectionjs, {

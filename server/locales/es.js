@@ -7,7 +7,7 @@ export default {
       session: {
         create: {
           success: 'Has iniciado sesión',
-          error: 'Email o contraseña incorrectos',
+          error: 'Correo electrónico o contraseña incorrectos',
         },
         delete: {
           success: 'Has cerrado sesión',
@@ -15,11 +15,20 @@ export default {
       },
       users: {
         create: {
-          error: 'No se pudo registrar',
-          success: 'Usuario registrado correctamente',
+          error: 'No se pudo registrar el usuario',
+          success: 'Usuario registrado con éxito',
         },
+        update: {
+          error: 'No se pudo actualizar el usuario',
+          success: 'Usuario actualizado con éxito',
+        },
+        delete: {
+          error: 'No se pudo eliminar el usuario',
+          success: 'Usuario eliminado con éxito',
+        },
+        onlyOwnerAccess: 'No puedes editar o eliminar a otro usuario',
       },
-      authError: '¡Acceso denegado! Por favor, inicia sesión',
+      authError: '¡Acceso denegado! Por favor, inicia sesión.',
     },
     layouts: {
       application: {
@@ -40,12 +49,24 @@ export default {
         },
       },
       users: {
+        users: 'Usuarios',
         id: 'ID',
-        email: 'Email',
-        createdAt: 'Creado el',
+        firstName: 'Nombre',
+        lastName: 'Apellido',
+        fullName: 'Nombre completo',
+        email: 'Correo electrónico',
+        password: 'Contraseña',
+        actions: 'Acciones',
+        updateAction: 'Editar',
+        deleteAction: 'Eliminar',
+        createdAt: 'Fecha de creación',
         new: {
           submit: 'Guardar',
           signUp: 'Registrarse',
+        },
+        update: {
+          title: 'Editar usuario',
+          submit: 'Actualizar',
         },
       },
       welcome: {
