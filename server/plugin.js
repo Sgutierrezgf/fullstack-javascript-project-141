@@ -12,6 +12,7 @@ import fastifySecureSession from '@fastify/secure-session';
 import fastifyPassport from '@fastify/passport';
 import fastifySensible from '@fastify/sensible';
 import { plugin as fastifyReverseRoutes } from 'fastify-reverse-routes';
+import fastifyMethodOverride from 'fastify-method-override';
 import fastifyObjectionjs from './lib/objectionPlugin.js';
 import qs from 'qs';
 import Pug from 'pug';
@@ -27,7 +28,6 @@ import getHelpers from './helpers/index.js';
 import * as knexConfig from '../knexfile.js';
 import models from './models/index.js';
 import FormStrategy from './lib/passportStrategies/FormStrategy.js';
-import fastifyMethodOverride from './lib/methodOverride.js';
 
 const __dirname = fileURLToPath(path.dirname(import.meta.url));
 
