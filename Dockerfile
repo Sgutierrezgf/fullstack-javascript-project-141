@@ -1,21 +1,17 @@
-FROM node:25-slim
+FROM node:22-bookworm
 
-RUN apt-get update && apt-get install -yq \
-  build-essential \
-  python3
+RUN apt-get update && apt-get install -y --no-install-recommends \
+    bash \
+    make \
+    python3 \
+    build-essential \
+    && rm -rf /var/lib/apt/lists/*
 
-RUN ln -s /usr/bin/python3 /usr/bin/python
+WORKDIR /project
 
-WORKDIR /app
-
-COPY package.json .
-COPY package-lock.json .
-
-RUN npm ci
+COPY package.json package-lock.json .npmrc ./
+RUN npm ci --legacy-peer-deps
 
 COPY . .
 
-ENV NODE_ENV=production
-RUN make build
-
-CMD ["bash", "-c", "make db-migrate && npm start"]
+CMD ["bash", "-c", "make setup && make test"]
