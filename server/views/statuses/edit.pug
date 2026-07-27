@@ -1,0 +1,10 @@
+extends ../layouts/application.pug
+
+block header
+  h1.my-4= t('views.statuses.update.title')
+
+block content
+  +formFor()(action=route('oneStatus', { id: status.id }) method='post')
+    input(type="hidden" name="_method" value="patch")
+    +input(status, 'name', t('views.statuses.name'), errors)(type="text")
+    +submit(status)(value=t('views.statuses.update.submit'))

@@ -28,11 +28,26 @@ export default {
         },
         onlyOwnerAccess: 'You cannot update or delete another user',
       },
+      statuses: {
+        create: {
+          error: 'Failed to create status',
+          success: 'Status created successfully',
+        },
+        update: {
+          error: 'Failed to update status',
+          success: 'Status updated successfully',
+        },
+        delete: {
+          error: 'Failed to delete status',
+          success: 'Status deleted successfully',
+        },
+      },
       authError: 'Access denied! Please login',
     },
     layouts: {
       application: {
         users: 'Users',
+        statuses: 'Statuses',
         signIn: 'Login',
         signUp: 'Register',
         signOut: 'Logout',
@@ -66,6 +81,24 @@ export default {
         },
         update: {
           title: 'Edit user',
+          submit: 'Update',
+        },
+      },
+      statuses: {
+        statuses: 'Statuses',
+        createAction: 'Create status',
+        id: 'ID',
+        name: 'Name',
+        createdAt: 'Created at',
+        actions: 'Actions',
+        updateAction: 'Edit',
+        deleteAction: 'Delete',
+        new: {
+          title: 'Create status',
+          submit: 'Create',
+        },
+        update: {
+          title: 'Edit status',
           submit: 'Update',
         },
       },

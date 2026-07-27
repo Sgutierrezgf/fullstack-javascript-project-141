@@ -1,0 +1,25 @@
+extends ../layouts/application.pug
+
+block header
+  h1.my-4= t('views.statuses.statuses')
+
+block content
+  a.btn.btn-primary.mb-3(href=route('newStatus'))= t('views.statuses.createAction')
+  table.table.table-striped
+    thead
+      tr
+        th= t('views.statuses.id')
+        th= t('views.statuses.name')
+        th= t('views.statuses.createdAt')
+        th= t('views.statuses.actions')
+    tbody
+      each status in statuses
+        tr
+          td= status.id
+          td= status.name
+          td= formatDate(status.createdAt)
+          td
+            a.btn.btn-primary.btn-sm.me-1(href=route('editStatus', { id: status.id }))= t('views.statuses.updateAction')
+            +formFor()(action=route('oneStatus', { id: status.id }) method='post' class='d-inline')
+              input(name='_method' type='hidden' value='delete')
+              input.btn.btn-danger.btn-sm(type='submit' value=t('views.statuses.deleteAction'))

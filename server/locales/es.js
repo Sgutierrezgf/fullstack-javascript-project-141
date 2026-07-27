@@ -28,11 +28,26 @@ export default {
         },
         onlyOwnerAccess: 'No puedes editar o eliminar a otro usuario',
       },
+      statuses: {
+        create: {
+          error: 'No se pudo crear el estado',
+          success: 'Estado creado con éxito',
+        },
+        update: {
+          error: 'No se pudo actualizar el estado',
+          success: 'Estado actualizado con éxito',
+        },
+        delete: {
+          error: 'No se pudo eliminar el estado',
+          success: 'Estado eliminado con éxito',
+        },
+      },
       authError: '¡Acceso denegado! Por favor, inicia sesión.',
     },
     layouts: {
       application: {
         users: 'Usuarios',
+        statuses: 'Estados',
         signIn: 'Iniciar sesión',
         signUp: 'Registrarse',
         signOut: 'Cerrar sesión',
@@ -66,6 +81,24 @@ export default {
         },
         update: {
           title: 'Editar usuario',
+          submit: 'Actualizar',
+        },
+      },
+      statuses: {
+        statuses: 'Estados',
+        createAction: 'Crear estado',
+        id: 'ID',
+        name: 'Nombre',
+        createdAt: 'Fecha de creación',
+        actions: 'Acciones',
+        updateAction: 'Editar',
+        deleteAction: 'Eliminar',
+        new: {
+          title: 'Crear estado',
+          submit: 'Crear',
+        },
+        update: {
+          title: 'Editar estado',
           submit: 'Actualizar',
         },
       },
