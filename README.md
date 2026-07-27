@@ -7,9 +7,7 @@ Aplicación web para gestionar tareas, usuarios, estados y etiquetas (proyecto H
 
 ## Aplicación en producción
 
-🔗 [Abrir aplicación en Render](https://YOUR-APP-NAME.onrender.com)
-
-> Tras desplegar en Render, sustituye `YOUR-APP-NAME` por el nombre real de tu servicio.
+🔗 [Abrir aplicación en Render](https://fullstack-javascript-project-141-flbw.onrender.com)
 
 ## Setup local
 
