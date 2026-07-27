@@ -34,11 +34,27 @@ const __dirname = fileURLToPath(path.dirname(import.meta.url));
 const mode = process.env.NODE_ENV || 'development';
 // const isDevelopment = mode === 'development';
 
+const rollbarAccessToken = process.env.ROLLBAR_ACCESS_TOKEN;
+
 const rollbar = new Rollbar({
-  enabled: mode === 'production',
-  accessToken: process.env.ROLLBAR_ACCESS_TOKEN,
+  accessToken: rollbarAccessToken,
+  environment: mode,
   captureUncaught: true,
   captureUnhandledRejections: true,
+  enabled: Boolean(rollbarAccessToken),
+});
+
+const reportToRollbar = (error, req) => new Promise((resolve) => {
+  if (!rollbarAccessToken) {
+    resolve();
+    return;
+  }
+  rollbar.error(error, req?.raw ?? req, (err) => {
+    if (err) {
+      console.error('Failed to report error to Rollbar:', err);
+    }
+    resolve();
+  });
 });
 
 const setUpViews = (app) => {
@@ -90,7 +106,7 @@ const addHooks = (app) => {
     };
   });
   app.addHook('onError', async (req, reply, error) => {
-    rollbar.error(error);
+    await reportToRollbar(error, req);
   });
 };
 
@@ -149,6 +165,7 @@ export default async (app, _options) => {
   await setupLocalization();
   setUpViews(app);
   setUpStaticAssets(app);
+  app.decorate('reportToRollbar', reportToRollbar);
   addRoutes(app);
   addHooks(app);
 
