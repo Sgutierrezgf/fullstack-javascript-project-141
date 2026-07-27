@@ -44,6 +44,21 @@ export default {
           errorTask: 'Cannot delete status connected to a task',
         },
       },
+      labels: {
+        create: {
+          error: 'Failed to create label',
+          success: 'Label created successfully',
+        },
+        update: {
+          error: 'Failed to update label',
+          success: 'Label updated successfully',
+        },
+        delete: {
+          error: 'Failed to delete label',
+          success: 'Label deleted successfully',
+          errorTask: 'Cannot delete label connected to a task',
+        },
+      },
       tasks: {
         create: {
           error: 'Failed to create task',
@@ -64,6 +79,7 @@ export default {
       application: {
         users: 'Users',
         statuses: 'Statuses',
+        labels: 'Labels',
         tasks: 'Tasks',
         signIn: 'Login',
         signUp: 'Register',
@@ -119,6 +135,24 @@ export default {
           submit: 'Update',
         },
       },
+      labels: {
+        labels: 'Labels',
+        createAction: 'Create label',
+        id: 'ID',
+        name: 'Name',
+        createdAt: 'Created at',
+        actions: 'Actions',
+        updateAction: 'Edit',
+        deleteAction: 'Delete',
+        new: {
+          title: 'Create label',
+          submit: 'Create',
+        },
+        update: {
+          title: 'Edit label',
+          submit: 'Update',
+        },
+      },
       tasks: {
         tasks: 'Tasks',
         createAction: 'Create task',
@@ -128,6 +162,7 @@ export default {
         status: 'Status',
         creator: 'Creator',
         executor: 'Executor',
+        labels: 'Labels',
         createdAt: 'Created at',
         actions: 'Actions',
         updateAction: 'Edit',

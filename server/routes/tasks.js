@@ -5,26 +5,30 @@ import i18next from 'i18next';
 export default (app) => {
   const User = app.objection.models.user;
   const Status = app.objection.models.status;
+  const Label = app.objection.models.label;
   const Task = app.objection.models.task;
 
   const getRelatedData = async () => {
-    const [users, statuses] = await Promise.all([
+    const [users, statuses, labels] = await Promise.all([
       User.query(),
       Status.query(),
+      Label.query(),
     ]);
-    return { users, statuses };
+    return { users, statuses, labels };
   };
 
   app
     .get('/tasks', { name: 'tasks', preValidation: app.authenticate }, async (req, reply) => {
-      const tasks = await Task.query().withGraphFetched('[status, creator, executor]');
+      const tasks = await Task.query().withGraphFetched('[status, creator, executor, labels]');
       reply.render('tasks/index', { tasks });
       return reply;
     })
     .get('/tasks/new', { name: 'newTask', preValidation: app.authenticate }, async (req, reply) => {
       const task = new Task();
-      const { users, statuses } = await getRelatedData();
-      reply.render('tasks/new', { task, users, statuses });
+      const { users, statuses, labels } = await getRelatedData();
+      reply.render('tasks/new', {
+        task, users, statuses, labels,
+      });
       return reply;
     })
     .post('/tasks', { preValidation: app.authenticate }, async (req, reply) => {
@@ -35,30 +39,35 @@ export default (app) => {
       };
 
       try {
-        const validTask = await Task.fromJson(taskData);
-        await Task.query().insert(validTask);
+        await Task.transaction(async (trx) => {
+          await Task.query(trx)
+            .allowGraph('labels')
+            .insertGraph(taskData, { relate: true });
+        });
         req.flash('info', i18next.t('flash.tasks.create.success'));
         reply.redirect(app.reverse('tasks'));
       } catch ({ data }) {
         req.flash('error', i18next.t('flash.tasks.create.error'));
-        const { users, statuses } = await getRelatedData();
+        const { users, statuses, labels } = await getRelatedData();
         reply.render('tasks/new', {
-          task: originalData, users, statuses, errors: data,
+          task: originalData, users, statuses, labels, errors: data,
         });
       }
       return reply;
     })
     .get('/tasks/:id', { name: 'oneTask', preValidation: app.authenticate }, async (req, reply) => {
       const task = await Task.query()
-        .withGraphFetched('[status, creator, executor]')
+        .withGraphFetched('[status, creator, executor, labels]')
         .findById(req.params.id);
       reply.render('tasks/show', { task });
       return reply;
     })
     .get('/tasks/:id/edit', { name: 'editTask', preValidation: app.authenticate }, async (req, reply) => {
-      const task = await Task.query().findById(req.params.id);
-      const { users, statuses } = await getRelatedData();
-      reply.render('tasks/edit', { task, users, statuses });
+      const task = await Task.query().withGraphFetched('[labels]').findById(req.params.id);
+      const { users, statuses, labels } = await getRelatedData();
+      reply.render('tasks/edit', {
+        task, users, statuses, labels,
+      });
       return reply;
     })
     .patch('/tasks/:id', { preValidation: app.authenticate }, async (req, reply) => {
@@ -67,19 +76,27 @@ export default (app) => {
       const originalData = req.body.data;
       const taskData = {
         ...originalData,
+        id: Number(id),
         creatorId: task.creatorId,
       };
 
       try {
-        const validTask = await Task.fromJson(taskData);
-        await task.$query().patch(validTask);
+        await Task.transaction(async (trx) => {
+          await Task.query(trx)
+            .allowGraph('labels')
+            .upsertGraph(taskData, {
+              relate: true,
+              unrelate: true,
+              noDelete: true,
+            });
+        });
         req.flash('info', i18next.t('flash.tasks.update.success'));
         reply.redirect(app.reverse('tasks'));
       } catch ({ data }) {
         req.flash('error', i18next.t('flash.tasks.update.error'));
-        const { users, statuses } = await getRelatedData();
+        const { users, statuses, labels } = await getRelatedData();
         reply.render('tasks/edit', {
-          task: { ...originalData, id }, users, statuses, errors: data,
+          task: { ...originalData, id }, users, statuses, labels, errors: data,
         });
       }
       return reply;
@@ -94,7 +111,10 @@ export default (app) => {
       }
 
       try {
-        await task.$query().delete();
+        await Task.transaction(async (trx) => {
+          await task.$relatedQuery('labels', trx).unrelate();
+          await task.$query(trx).delete();
+        });
         req.flash('info', i18next.t('flash.tasks.delete.success'));
       } catch (e) {
         req.flash('error', i18next.t('flash.tasks.delete.error'));

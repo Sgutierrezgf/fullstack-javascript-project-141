@@ -15,4 +15,8 @@ block content
       option(value='')
       each user in users
         option(value=user.id selected=(Number(user.id) === Number(task.executorId)))= user.fullName
+    +select(task, 'labels', t('views.tasks.labels'), errors, true)
+      each label in labels
+        - const selectedIds = (task.labels || []).map((l) => Number(l.id ?? l))
+        option(value=label.id selected=selectedIds.includes(Number(label.id)))= label.name
     +submit(task)(value=t('views.tasks.new.submit'))

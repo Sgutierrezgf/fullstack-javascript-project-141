@@ -44,6 +44,21 @@ export default {
           errorTask: 'No se puede eliminar el estado porque está asignado a tareas',
         },
       },
+      labels: {
+        create: {
+          error: 'No se pudo crear la etiqueta',
+          success: 'Etiqueta creada con éxito',
+        },
+        update: {
+          error: 'No se pudo actualizar la etiqueta',
+          success: 'Etiqueta actualizada con éxito',
+        },
+        delete: {
+          error: 'No se pudo eliminar la etiqueta',
+          success: 'Etiqueta eliminada con éxito',
+          errorTask: 'No se puede eliminar la etiqueta porque está asignada a tareas',
+        },
+      },
       tasks: {
         create: {
           error: 'No se pudo crear la tarea',
@@ -64,6 +79,7 @@ export default {
       application: {
         users: 'Usuarios',
         statuses: 'Estados',
+        labels: 'Etiquetas',
         tasks: 'Tareas',
         signIn: 'Iniciar sesión',
         signUp: 'Registrarse',
@@ -119,6 +135,24 @@ export default {
           submit: 'Actualizar',
         },
       },
+      labels: {
+        labels: 'Etiquetas',
+        createAction: 'Crear etiqueta',
+        id: 'ID',
+        name: 'Nombre',
+        createdAt: 'Fecha de creación',
+        actions: 'Acciones',
+        updateAction: 'Editar',
+        deleteAction: 'Eliminar',
+        new: {
+          title: 'Crear etiqueta',
+          submit: 'Crear',
+        },
+        update: {
+          title: 'Editar etiqueta',
+          submit: 'Actualizar',
+        },
+      },
       tasks: {
         tasks: 'Tareas',
         createAction: 'Crear tarea',
@@ -128,6 +162,7 @@ export default {
         status: 'Estado',
         creator: 'Autor',
         executor: 'Ejecutor',
+        labels: 'Etiquetas',
         createdAt: 'Fecha de creación',
         actions: 'Acciones',
         updateAction: 'Editar',

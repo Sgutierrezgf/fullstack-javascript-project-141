@@ -1,16 +1,17 @@
 // @ts-check
 
-import _ from 'lodash';
 import fastify from 'fastify';
 
 import init from '../server/plugin.js';
 import {
-  getFakeTask,
+  prepareData,
+  getFakeLabel,
+  prepareLabelsData,
   prepareTasksData,
   signInApp,
 } from './helpers/index.js';
 
-describe('test tasks CRUD', () => {
+describe('test labels CRUD', () => {
   let app;
   let knex;
   let models;
@@ -28,14 +29,15 @@ describe('test tasks CRUD', () => {
 
   beforeEach(async () => {
     await knex.migrate.latest();
-    await prepareTasksData(app);
+    await prepareData(app);
     sessionCookie = await signInApp(app);
+    await prepareLabelsData(app);
   });
 
   it('index', async () => {
     const request = {
       method: 'GET',
-      url: app.reverse('tasks'),
+      url: app.reverse('labels'),
     };
 
     const responseNoAuth = await app.inject(request);
@@ -51,7 +53,7 @@ describe('test tasks CRUD', () => {
   it('new', async () => {
     const request = {
       method: 'GET',
-      url: app.reverse('newTask'),
+      url: app.reverse('newLabel'),
     };
 
     const responseNoAuth = await app.inject(request);
@@ -65,55 +67,31 @@ describe('test tasks CRUD', () => {
   });
 
   it('create', async () => {
-    const params = _.omit(getFakeTask(true), 'creatorId');
+    const params = getFakeLabel();
     const request = {
       method: 'POST',
-      url: app.reverse('tasks'),
+      url: app.reverse('labels'),
       payload: {
         data: params,
       },
     };
-
     await app.inject(request);
-    const noExistingTask = await models.task.query().findOne({ name: params.name });
-    expect(noExistingTask).toBeUndefined();
+    const noExistingLabel = await models.label.query().findOne({ name: params.name });
+    expect(noExistingLabel).toBeUndefined();
 
     await app.inject({
       ...request,
       cookies: sessionCookie,
     });
-    const newTask = await models.task.query()
-      .withGraphFetched('labels')
-      .findOne({ name: params.name });
-    expect(_.omit(newTask, 'labels')).toMatchObject({
-      ..._.omit(params, 'labels'),
-      creatorId: 2,
-    });
-    expect(newTask.labels.map((label) => label.id).sort()).toEqual(params.labels);
-  });
-
-  it('show', async () => {
-    const id = 1;
-    const request = {
-      method: 'GET',
-      url: app.reverse('oneTask', { id }),
-    };
-
-    const responseNoAuth = await app.inject(request);
-    expect(responseNoAuth.statusCode).toBe(302);
-
-    const responseWithAuth = await app.inject({
-      ...request,
-      cookies: sessionCookie,
-    });
-    expect(responseWithAuth.statusCode).toBe(200);
+    const newLabel = await models.label.query().findOne({ name: params.name });
+    expect(newLabel).toMatchObject(params);
   });
 
   it('edit', async () => {
     const id = 1;
     const request = {
       method: 'GET',
-      url: app.reverse('editTask', { id }),
+      url: app.reverse('editLabel', { id }),
     };
 
     const responseNoAuth = await app.inject(request);
@@ -127,54 +105,61 @@ describe('test tasks CRUD', () => {
   });
 
   it('update', async () => {
-    const params = _.omit(getFakeTask(true), 'creatorId');
+    const params = getFakeLabel();
     const id = 1;
-    const taskExisting = await models.task.query().findById(id);
+    const labelExisting = await models.label.query().findById(1);
     const request = {
       method: 'PATCH',
-      url: app.reverse('oneTask', { id }),
+      url: app.reverse('oneLabel', { id }),
       payload: {
         data: params,
       },
     };
 
     await app.inject(request);
-    const taskExistingSame = await models.task.query().findById(id);
-    expect(taskExisting).toMatchObject(taskExistingSame);
+    const labelExistingSame = await models.label.query().findById(1);
+    expect(labelExisting).toMatchObject(labelExistingSame);
 
     await app.inject({
       ...request,
       cookies: sessionCookie,
     });
-    const taskUpdate = await models.task.query()
-      .withGraphFetched('labels')
-      .findById(id);
-    expect(_.omit(taskUpdate, 'labels')).toMatchObject({
-      ..._.omit(taskExisting, 'labels'),
-      ..._.omit(params, 'labels'),
-    });
-    expect(taskUpdate.labels.map((label) => label.id).sort()).toEqual(params.labels);
+    const labelUpdate = await models.label.query().findById(id);
+    expect({ ...labelExisting, ...params }).toMatchObject(labelUpdate);
   });
 
   it('delete', async () => {
     const id = 1;
     const request = {
       method: 'DELETE',
-      url: app.reverse('oneTask', { id }),
+      url: app.reverse('oneLabel', { id }),
     };
 
-    const taskExisting = await models.task.query().findById(id);
-    expect(taskExisting).not.toBeUndefined();
-
-    await app.inject(request);
-    expect(await models.task.query().findById(id)).not.toBeUndefined();
+    const labelExisting = await models.label.query().findById(id);
+    expect(labelExisting).not.toBeUndefined();
 
     await app.inject({
       ...request,
       cookies: sessionCookie,
     });
-    const taskDelete = await models.task.query().findById(id);
-    expect(taskDelete).toBeUndefined();
+    const labelDelete = await models.label.query().findById(id);
+    expect(labelDelete).toBeUndefined();
+  });
+
+  it('delete with related task', async () => {
+    await knex.migrate.rollback();
+    await knex.migrate.latest();
+    await prepareTasksData(app);
+    sessionCookie = await signInApp(app);
+
+    const id = 1;
+    await app.inject({
+      method: 'DELETE',
+      url: app.reverse('oneLabel', { id }),
+      cookies: sessionCookie,
+    });
+    const label = await models.label.query().findById(id);
+    expect(label).not.toBeUndefined();
   });
 
   afterEach(async () => {
