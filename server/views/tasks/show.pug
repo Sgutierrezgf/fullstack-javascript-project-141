@@ -1,0 +1,35 @@
+extends ../layouts/application.pug
+
+block header
+  h1.my-4= task.name
+
+block content
+  .row
+    .col-md-8
+      p.lead(style='white-space: pre-line')= task.description
+    .col-md-4
+      p
+        strong= t('views.tasks.status')
+        | :
+        = ' '
+        = task.status.name
+      p
+        strong= t('views.tasks.creator')
+        | :
+        = ' '
+        = task.creator.fullName
+      p
+        strong= t('views.tasks.executor')
+        | :
+        = ' '
+        = (task.executor || {}).fullName || ''
+      p
+        strong= t('views.tasks.createdAt')
+        | :
+        = ' '
+        = formatDate(task.createdAt)
+      a.btn.btn-primary.me-1(href=route('editTask', { id: task.id }))= t('views.tasks.updateAction')
+      +formFor()(action=route('oneTask', { id: task.id }) method='post' class='d-inline')
+        input(name='_method' type='hidden' value='delete')
+        input.btn.btn-danger(type='submit' value=t('views.tasks.deleteAction'))
+      a.btn.btn-secondary.ms-1(href=route('tasks'))= t('views.tasks.show.back')

@@ -65,6 +65,17 @@ export default (app) => {
       preHandler: app.onlyOwnerAccess,
     }, async (req, reply) => {
       const { id } = req.params;
+      const Task = app.objection.models.task;
+      const relatedTasks = await Task.query()
+        .where('creatorId', id)
+        .orWhere('executorId', id);
+
+      if (relatedTasks.length > 0) {
+        req.flash('error', i18next.t('flash.users.delete.hasTasks'));
+        reply.redirect(app.reverse('users'));
+        return reply;
+      }
+
       try {
         await User.query().deleteById(Number(id));
         req.logOut();
@@ -73,5 +84,6 @@ export default (app) => {
         req.flash('error', i18next.t('flash.users.delete.error'));
       }
       reply.redirect(app.reverse('users'));
+      return reply;
     });
 };

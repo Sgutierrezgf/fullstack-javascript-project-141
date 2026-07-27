@@ -26,6 +26,22 @@ export const prepareStatusesData = async (app) => {
   await knex('statuses').insert(statuses);
 };
 
+export const getFakeTask = () => ({
+  name: faker.word.adjective() + faker.string.alphanumeric(5),
+  description: faker.lorem.sentence(),
+  statusId: faker.number.int({ min: 1, max: 10 }),
+  creatorId: 2,
+  executorId: faker.number.int({ min: 1, max: 3 }),
+});
+
+export const prepareTasksData = async (app) => {
+  await prepareData(app);
+  await prepareStatusesData(app);
+  const { knex } = app.objection;
+  const tasks = Array(5).fill().map(getFakeTask);
+  await knex('tasks').insert(tasks);
+};
+
 export const signInApp = async (app) => {
   const responseSignIn = await app.inject({
     method: 'POST',

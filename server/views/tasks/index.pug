@@ -1,0 +1,32 @@
+extends ../layouts/application.pug
+
+block header
+  h1.my-4= t('views.tasks.tasks')
+
+block content
+  a.btn.btn-primary.mb-3(href=route('newTask'))= t('views.tasks.createAction')
+  table.table.table-striped
+    thead
+      tr
+        th= t('views.tasks.id')
+        th= t('views.tasks.name')
+        th= t('views.tasks.status')
+        th= t('views.tasks.creator')
+        th= t('views.tasks.executor')
+        th= t('views.tasks.createdAt')
+        th= t('views.tasks.actions')
+    tbody
+      each task in tasks
+        tr
+          td= task.id
+          td
+            a(href=route('oneTask', { id: task.id }))= task.name
+          td= task.status.name
+          td= task.creator.fullName
+          td= (task.executor || {}).fullName || ''
+          td= formatDate(task.createdAt)
+          td
+            a.btn.btn-primary.btn-sm.me-1(href=route('editTask', { id: task.id }))= t('views.tasks.updateAction')
+            +formFor()(action=route('oneTask', { id: task.id }) method='post' class='d-inline')
+              input(name='_method' type='hidden' value='delete')
+              input.btn.btn-danger.btn-sm(type='submit' value=t('views.tasks.deleteAction'))

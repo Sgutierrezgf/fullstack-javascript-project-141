@@ -25,6 +25,7 @@ export default {
         delete: {
           error: 'Failed to delete user',
           success: 'User deleted successfully',
+          hasTasks: 'Cannot delete user with related tasks',
         },
         onlyOwnerAccess: 'You cannot update or delete another user',
       },
@@ -40,6 +41,21 @@ export default {
         delete: {
           error: 'Failed to delete status',
           success: 'Status deleted successfully',
+          errorTask: 'Cannot delete status connected to a task',
+        },
+      },
+      tasks: {
+        create: {
+          error: 'Failed to create task',
+          success: 'Task created successfully',
+        },
+        update: {
+          error: 'Failed to update task',
+          success: 'Task updated successfully',
+        },
+        delete: {
+          error: 'Only the author can delete this task',
+          success: 'Task deleted successfully',
         },
       },
       authError: 'Access denied! Please login',
@@ -48,6 +64,7 @@ export default {
       application: {
         users: 'Users',
         statuses: 'Statuses',
+        tasks: 'Tasks',
         signIn: 'Login',
         signUp: 'Register',
         signOut: 'Logout',
@@ -100,6 +117,31 @@ export default {
         update: {
           title: 'Edit status',
           submit: 'Update',
+        },
+      },
+      tasks: {
+        tasks: 'Tasks',
+        createAction: 'Create task',
+        id: 'ID',
+        name: 'Name',
+        description: 'Description',
+        status: 'Status',
+        creator: 'Creator',
+        executor: 'Executor',
+        createdAt: 'Created at',
+        actions: 'Actions',
+        updateAction: 'Edit',
+        deleteAction: 'Delete',
+        new: {
+          title: 'Create task',
+          submit: 'Create',
+        },
+        update: {
+          title: 'Edit task',
+          submit: 'Update',
+        },
+        show: {
+          back: 'Back',
         },
       },
       welcome: {

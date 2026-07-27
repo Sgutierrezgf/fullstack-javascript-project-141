@@ -25,6 +25,7 @@ export default {
         delete: {
           error: 'No se pudo eliminar el usuario',
           success: 'Usuario eliminado con éxito',
+          hasTasks: 'No se puede eliminar el usuario porque tiene tareas asociadas',
         },
         onlyOwnerAccess: 'No puedes editar o eliminar a otro usuario',
       },
@@ -40,6 +41,21 @@ export default {
         delete: {
           error: 'No se pudo eliminar el estado',
           success: 'Estado eliminado con éxito',
+          errorTask: 'No se puede eliminar el estado porque está asignado a tareas',
+        },
+      },
+      tasks: {
+        create: {
+          error: 'No se pudo crear la tarea',
+          success: 'Tarea creada con éxito',
+        },
+        update: {
+          error: 'No se pudo actualizar la tarea',
+          success: 'Tarea actualizada con éxito',
+        },
+        delete: {
+          error: 'Solo el autor puede eliminar esta tarea',
+          success: 'Tarea eliminada con éxito',
         },
       },
       authError: '¡Acceso denegado! Por favor, inicia sesión.',
@@ -48,6 +64,7 @@ export default {
       application: {
         users: 'Usuarios',
         statuses: 'Estados',
+        tasks: 'Tareas',
         signIn: 'Iniciar sesión',
         signUp: 'Registrarse',
         signOut: 'Cerrar sesión',
@@ -100,6 +117,31 @@ export default {
         update: {
           title: 'Editar estado',
           submit: 'Actualizar',
+        },
+      },
+      tasks: {
+        tasks: 'Tareas',
+        createAction: 'Crear tarea',
+        id: 'ID',
+        name: 'Nombre',
+        description: 'Descripción',
+        status: 'Estado',
+        creator: 'Autor',
+        executor: 'Ejecutor',
+        createdAt: 'Fecha de creación',
+        actions: 'Acciones',
+        updateAction: 'Editar',
+        deleteAction: 'Eliminar',
+        new: {
+          title: 'Crear tarea',
+          submit: 'Crear',
+        },
+        update: {
+          title: 'Editar tarea',
+          submit: 'Actualizar',
+        },
+        show: {
+          back: 'Volver',
         },
       },
       welcome: {
